@@ -3,9 +3,12 @@ package me.endureblackout.discbot;
 import java.util.List;
 
 import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Emote;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.events.emote.EmoteAddedEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.PermissionException;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -87,9 +90,17 @@ public class BotListener extends ListenerAdapter {
 		if(e.getMessage().getRawContent().equalsIgnoreCase("/meme")) {
 			e.getMessage().delete().queue();
 			
-			
+			e.getChannel().sendMessage("").queue();
 		}
+	}
+	
+	@Override
+	public void onEmoteAdded(EmoteAddedEvent e) {
+		Emote emote = e.getEmote();
 		
+		e.getGuild().getPublicChannel().sendMessage("New emote added! " + emote);
+		TextChannel channel = e.getGuild().getTextChannelById("Announcements");
 		
+		channel.sendMessage("New emote added! " + emote);
 	}
 }
