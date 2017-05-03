@@ -1,12 +1,10 @@
 package me.endureblackout.discbot;
 
-import java.awt.SecondaryLoop;
 import java.util.List;
 
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.PermissionException;
@@ -20,12 +18,14 @@ public class BotListener extends ListenerAdapter {
 		}
 
 		if (e.getMessage().getRawContent().equalsIgnoreCase("/avatar")) {
+			e.getMessage().delete().queue();
+			
 			String s = e.getAuthor().getAvatarUrl();
-			e.getChannel().sendMessage(e.getAuthor().getAvatarUrl()).queue();
+			e.getChannel().sendMessage(s).queue();
 		}
 
 		if (e.getMessage().getRawContent().equalsIgnoreCase("laugh")) {
-			e.getMessage().addReaction(e.getGuild().getEmoteById("308795166607671306")).queue();
+			e.getMessage().addReaction(e.getGuild().getEmoteById("laugh")).queue();
 		}
 
 		if (e.getMessage().getRawContent().startsWith("/kick")) {
@@ -40,8 +40,6 @@ public class BotListener extends ListenerAdapter {
 				guild.getController().kick(memb).queue(
 						success -> e.getChannel().sendMessage("Kicked " + memb.getEffectiveName()).queue(), error -> {
 							if (error instanceof PermissionException) {
-								PermissionException pe = (PermissionException) error;
-								Permission missingPermision = pe.getPermission();
 
 								e.getChannel().sendMessage(
 										"Permission kicking [" + memb.getEffectiveName() + "]: " + error.getMessage())
@@ -84,6 +82,12 @@ public class BotListener extends ListenerAdapter {
 			} else {
 				e.getChannel().sendMessage(e.getAuthor().getAsMention() + " you don't have permission to ban!").queue();
 			}
+		}
+		
+		if(e.getMessage().getRawContent().equalsIgnoreCase("/meme")) {
+			e.getMessage().delete().queue();
+			
+			
 		}
 		
 		
